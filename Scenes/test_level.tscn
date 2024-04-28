@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://cao3uahc1eiwj"]
+
+[ext_resource type="PackedScene" uid="uid://clkjalkae5nyt" path="res://Scenes/noluck.tscn" id="1_pj4mw"]
+[ext_resource type="Texture2D" uid="uid://dgsdipq6410sm" path="res://icon.svg" id="1_sg20d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lrwl6"]
+size = Vector2(1151, 66)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdbeo"]
+size = Vector2(128, 130)
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="GroundTest" type="StaticBody2D" parent="."]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundTest"]
+position = Vector2(576.5, 615)
+shape = SubResource("RectangleShape2D_lrwl6")
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundTest/CollisionShape2D"]
+position = Vector2(1, 0)
+scale = Vector2(8.96094, 0.546875)
+texture = ExtResource("1_sg20d")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(594, 338)
+zoom = Vector2(0.675, 0.675)
+
+[node name="Noluck" parent="." instance=ExtResource("1_pj4mw")]
+position = Vector2(369, 536)
+NUM_OF_DASHES = 2
+WALL_SLIDE_FALL_GRACE_LENGTH = 0.5
+wall_jump_gravity = 150
+
+[node name="WallTest" type="StaticBody2D" parent="." groups=["Wall"]]
+position = Vector2(66, 257)
+scale = Vector2(1, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTest"]
+shape = SubResource("RectangleShape2D_vdbeo")
+
+[node name="Sprite2D" type="Sprite2D" parent="WallTest"]
+modulate = Color(0.247059, 1, 0.294118, 1)
+texture = ExtResource("1_sg20d")
+
+[node name="WallTest2" type="StaticBody2D" parent="." groups=["Wall"]]
+position = Vector2(1087, 256)
+scale = Vector2(1, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTest2"]
+shape = SubResource("RectangleShape2D_vdbeo")
+
+[node name="Sprite2D" type="Sprite2D" parent="WallTest2"]
+modulate = Color(0.247059, 1, 0.294118, 1)
+texture = ExtResource("1_sg20d")

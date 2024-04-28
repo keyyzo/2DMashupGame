@@ -1,0 +1,86 @@
+[gd_scene load_steps=13 format=3 uid="uid://clkjalkae5nyt"]
+
+[ext_resource type="Script" path="res://Scripts/Player/PlayerController.gd" id="1_285cl"]
+[ext_resource type="Texture2D" uid="uid://dbclgpe6gxde7" path="res://Sprites/PlayerCharacter/noluck_static.png" id="1_ckp2j"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerStateMachine.gd" id="3_xxcw0"]
+[ext_resource type="Script" path="res://Scripts/Player/IdlePlayerState.gd" id="4_wdbnd"]
+[ext_resource type="Script" path="res://Scripts/Player/WalkingPlayerState.gd" id="5_flb6q"]
+[ext_resource type="Script" path="res://Scripts/Player/JumpingPlayerState.gd" id="6_0g88x"]
+[ext_resource type="Script" path="res://Scripts/Player/DashingPlayerState.gd" id="6_lar10"]
+[ext_resource type="Script" path="res://Scripts/Player/FallingPlayerState.gd" id="7_pq5jj"]
+[ext_resource type="Script" path="res://Scripts/Player/WallJumpingPlayerState.gd" id="9_5k6jb"]
+[ext_resource type="Script" path="res://Scripts/Player/DoubleJumpPlayerState.gd" id="10_us0gu"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8k2yh"]
+radius = 7.0
+height = 16.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8jxu1"]
+size = Vector2(48, 64)
+
+[node name="Noluck" type="CharacterBody2D" node_paths=PackedStringArray("WALL_COLLIDER", "MELEE_SIDE_HITBOX")]
+script = ExtResource("1_285cl")
+WALL_COLLIDER = NodePath("WallCollider")
+MELEE_SIDE_HITBOX = NodePath("MeleeHitboxSide")
+
+[node name="WallCollider" type="RayCast2D" parent="."]
+target_position = Vector2(40, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+scale = Vector2(2, 2)
+shape = SubResource("CapsuleShape2D_8k2yh")
+disabled = true
+debug_color = Color(0, 0.627451, 0.733333, 0.419608)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(4, 4)
+texture = ExtResource("1_ckp2j")
+
+[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("CURRENT_STATE")]
+script = ExtResource("3_xxcw0")
+CURRENT_STATE = NodePath("IdlePlayerState")
+
+[node name="IdlePlayerState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_wdbnd")
+
+[node name="WalkingPlayerState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("5_flb6q")
+
+[node name="DashingPlayerState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("DASH_TIMER")]
+script = ExtResource("6_lar10")
+DASH_TIMER = NodePath("DashLength")
+
+[node name="DashLength" type="Timer" parent="PlayerStateMachine/DashingPlayerState"]
+
+[node name="JumpingPlayerState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("6_0g88x")
+
+[node name="FallingPlayerState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("7_pq5jj")
+
+[node name="WallJumpingPlayerState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("FALL_GRACE_TIMER", "WALL_COLLIDER")]
+script = ExtResource("9_5k6jb")
+FALL_GRACE_TIMER = NodePath("FallGraceTimer")
+WALL_COLLIDER = NodePath("../../WallCollider")
+
+[node name="FallGraceTimer" type="Timer" parent="PlayerStateMachine/WallJumpingPlayerState"]
+one_shot = true
+
+[node name="DoubleJumpPlayerState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("10_us0gu")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(4, 4)
+polygon = PackedVector2Array(-7, 8, 7, 8, 7, -2, 3, -8, -3, -8, -7, -2)
+
+[node name="MeleeHitboxSide" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitboxSide"]
+position = Vector2(58, 0)
+shape = SubResource("RectangleShape2D_8jxu1")
+debug_color = Color(0.572549, 0.133333, 0.819608, 0.419608)
+
+[connection signal="timeout" from="PlayerStateMachine/DashingPlayerState/DashLength" to="PlayerStateMachine/DashingPlayerState" method="_on_dash_length_timeout"]
+[connection signal="timeout" from="PlayerStateMachine/WallJumpingPlayerState/FallGraceTimer" to="PlayerStateMachine/WallJumpingPlayerState" method="_on_fall_grace_timer_timeout"]
