@@ -30,8 +30,8 @@ zoom = Vector2(0.675, 0.675)
 [node name="Noluck" parent="." instance=ExtResource("1_pj4mw")]
 position = Vector2(369, 536)
 NUM_OF_DASHES = 2
-WALL_SLIDE_FALL_GRACE_LENGTH = 0.5
-wall_jump_gravity = 150
+WALL_SLIDE_FALL_GRACE_LENGTH = 0.7
+wall_jump_gravity = 100
 
 [node name="WallTest" type="StaticBody2D" parent="." groups=["Wall"]]
 position = Vector2(66, 257)

@@ -44,7 +44,9 @@ func update(delta):
 		print("1st Fall call")
 		transition.emit("FallingPlayerState")
 		
-	if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and (!Input.is_action_pressed("move_left") and !Input.is_action_pressed("move_right")):
+	#if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and (!Input.is_action_pressed("move_left") and !Input.is_action_pressed("move_right")):
+	if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and PLAYER.input_direction == 0:
+		print("Drop call")
 		if grace_period_started == false:
 			grace_period_activated(PLAYER.WALL_SLIDE_FALL_GRACE_LENGTH)
 		#FALL_GRACE_TIMER.start(PLAYER.WALL_SLIDE_FALL_GRACE_LENGTH)
@@ -53,19 +55,39 @@ func update(delta):
 		if grace_period_finished == true:
 			transition.emit("FallingPlayerState")
 			print("2nd Fall call")
+			
+		if (PLAYER.last_wall_normal == 1 and PLAYER.input_direction == -1) or (PLAYER.last_wall_normal == -1 and PLAYER.input_direction == 1) and grace_period_started == true:
+				grace_period_stopped()
+				print("Drop call stopped")
+		
+		if (PLAYER.last_wall_normal == 1 and PLAYER.input_direction == 1) or (PLAYER.last_wall_normal == -1 and PLAYER.input_direction == -1) and grace_period_started == true:
+			print("Push off activated")
+			transition.emit("FallingPlayerState")
+			
 	
 	if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and PLAYER.input_direction != 0:
 		if (PLAYER.last_wall_normal == 1 and PLAYER.input_direction == 1) or (PLAYER.last_wall_normal == -1 and PLAYER.input_direction == -1):
+			print("Pushoff call")
 		
 			if grace_period_started == false:
 				grace_period_activated(PLAYER.PUSH_OFF_FALL_GRACE_LENGTH)
 			#FALL_GRACE_TIMER.start(PLAYER.WALL_SLIDE_FALL_GRACE_LENGTH)
 			#print("Grace period activated")
 			
+			if grace_period_started == true:
+				if FALL_GRACE_TIMER.time_left > PLAYER.PUSH_OFF_FALL_GRACE_LENGTH:
+					grace_period_stopped()
+					grace_period_activated(PLAYER.PUSH_OFF_FALL_GRACE_LENGTH)
+					#FALL_GRACE_TIMER.start(PLAYER.PUSH_OFF_FALL_GRACE_LENGTH)
+				
 			
 			if grace_period_finished == true:
 				transition.emit("FallingPlayerState")
 				print("2nd Fall call")
+				
+		if grace_period_started == true:
+			if (PLAYER.last_wall_normal == 1 and PLAYER.input_direction == -1) or (PLAYER.last_wall_normal == -1 and PLAYER.input_direction == 1):
+				grace_period_stopped()
 		
 		
 	#if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and (!Input.is_action_pressed("move_left") and !Input.is_action_pressed("move_right")):
@@ -93,4 +115,10 @@ func _on_fall_grace_timer_timeout() -> void:
 func grace_period_activated(length_of_grace:float):
 	FALL_GRACE_TIMER.start(length_of_grace)
 	print("Grace period activated")
+	print("Grace period remaining: ", str(FALL_GRACE_TIMER.time_left))
 	grace_period_started = true
+	
+func grace_period_stopped():
+	FALL_GRACE_TIMER.stop()
+	print("Grace period stopped early")
+	grace_period_started = false
