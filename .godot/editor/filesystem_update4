@@ -1,9 +1,3 @@
 res://Scenes/noluck.tscn
 res://Scenes/test_level.tscn
-res://Scripts/Player/DashingPlayerState.gd
 res://Scripts/Player/PlayerController.gd
-res://Scripts/Player/WallJumpingPlayerState.gd
-res://Scripts/Player/JumpingPlayerState.gd
-res://Scripts/Player/FallingPlayerState.gd
-res://Scripts/Player/IdlePlayerState.gd
-res://Scripts/Player/DoubleJumpPlayerState.gd

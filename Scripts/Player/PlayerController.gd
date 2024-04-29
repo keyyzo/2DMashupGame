@@ -42,6 +42,10 @@ var wall_jump_unlocked : bool = true
 @export var MELEE_SIDE_HITBOX : Area2D
 @export var MELEE_TOP_HITBOX : Area2D
 @export var MELEE_BOTTOM_HITBOX : Area2D
+@export var MELEE_RESET_LENGTH : float = 1.0
+@export var MELEE_ATTACK_LENGTH : float = 0.3
+var can_melee_attack : bool = true
+
 
 # Gravity variables
 
@@ -80,6 +84,9 @@ func _physics_process(delta: float) -> void:
 #
 	#move_and_slide()
 	
+	if Input.is_action_just_pressed("attack") and can_melee_attack == true:
+		can_melee_attack = false
+		melee_attack()
 	
 	
 func update_input(_speed : float, _acceleration : float, _deceleration : float):
@@ -115,3 +122,16 @@ func update_gravity(delta) -> void:
 func wall_collider_check() -> bool:
 	return WALL_COLLIDER.is_colliding()
 		
+		
+func melee_attack():
+	$MeleeHitboxSide/MeleeSideCollider.set_deferred("disabled",false)
+	#MELEE_SIDE_HITBOX.set_deferred("Monitoring", true)
+	$MeleeHitboxSide/AnimatedSprite2D.show()
+	$MeleeHitboxSide/AnimatedSprite2D.frame = randi_range(0,2)
+	await get_tree().create_timer(MELEE_ATTACK_LENGTH).timeout
+	#MELEE_SIDE_HITBOX.set_deferred("Monitoring", false)
+	$MeleeHitboxSide/MeleeSideCollider.set_deferred("disabled",true)
+	$MeleeHitboxSide/AnimatedSprite2D.hide()
+	can_melee_attack = true
+	
+	

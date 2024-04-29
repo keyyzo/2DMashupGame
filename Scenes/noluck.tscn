@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://clkjalkae5nyt"]
+[gd_scene load_steps=18 format=3 uid="uid://clkjalkae5nyt"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.gd" id="1_285cl"]
 [ext_resource type="Texture2D" uid="uid://dbclgpe6gxde7" path="res://Sprites/PlayerCharacter/noluck_static.png" id="1_ckp2j"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Scripts/Player/FallingPlayerState.gd" id="7_pq5jj"]
 [ext_resource type="Script" path="res://Scripts/Player/WallJumpingPlayerState.gd" id="9_5k6jb"]
 [ext_resource type="Script" path="res://Scripts/Player/DoubleJumpPlayerState.gd" id="10_us0gu"]
+[ext_resource type="Texture2D" uid="uid://xp7aomb3khkp" path="res://Sprites/PlayerCharacter/static_melee_attacks-Sheet.png" id="11_qij1g"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8k2yh"]
 radius = 7.0
@@ -17,6 +18,35 @@ height = 16.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8jxu1"]
 size = Vector2(48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o88ns"]
+atlas = ExtResource("11_qij1g")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wna0o"]
+atlas = ExtResource("11_qij1g")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qoniu"]
+atlas = ExtResource("11_qij1g")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2lxdn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o88ns")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wna0o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qoniu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
 
 [node name="Noluck" type="CharacterBody2D" node_paths=PackedStringArray("WALL_COLLIDER", "MELEE_SIDE_HITBOX")]
 script = ExtResource("1_285cl")
@@ -76,11 +106,22 @@ scale = Vector2(4, 4)
 polygon = PackedVector2Array(-7, 8, 7, 8, 7, -2, 3, -8, -3, -8, -7, -2)
 
 [node name="MeleeHitboxSide" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 48
+monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitboxSide"]
+[node name="MeleeSideCollider" type="CollisionShape2D" parent="MeleeHitboxSide"]
 position = Vector2(58, 0)
 shape = SubResource("RectangleShape2D_8jxu1")
+disabled = true
 debug_color = Color(0.572549, 0.133333, 0.819608, 0.419608)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MeleeHitboxSide"]
+visible = false
+texture_filter = 1
+position = Vector2(55, 9.53674e-07)
+scale = Vector2(3.375, 4)
+sprite_frames = SubResource("SpriteFrames_2lxdn")
 
 [connection signal="timeout" from="PlayerStateMachine/DashingPlayerState/DashLength" to="PlayerStateMachine/DashingPlayerState" method="_on_dash_length_timeout"]
 [connection signal="timeout" from="PlayerStateMachine/WallJumpingPlayerState/FallGraceTimer" to="PlayerStateMachine/WallJumpingPlayerState" method="_on_fall_grace_timer_timeout"]
