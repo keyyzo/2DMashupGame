@@ -2,10 +2,10 @@ class_name WallJumpingPlayerState
 
 extends PlayerMovementState
 
-@export var BASE_SPEED : float = 400.0
-@export var BASE_ACCELERATION_RATE : float = 30.0
-@export var BASE_DECELERATION_RATE : float = 40.0
-@export var BASE_JUMP_VELOCITY : float = -400.0
+@export var BASE_SPEED : float = 100.0
+@export var BASE_ACCELERATION_RATE : float = 10.0
+@export var BASE_DECELERATION_RATE : float = 20.0
+@export var BASE_JUMP_VELOCITY : float = -200.0
 
 @export var FALL_GRACE_TIMER : Timer
 
@@ -22,7 +22,7 @@ func enter(previous_state) -> void:
 	
 	
 func exit() -> void:
-	PLAYER.gravity_to_use = PLAYER.normal_gravity
+	PLAYER.gravity_to_use = PLAYER.updated_normal_gravity
 	PLAYER.is_wall_sliding = false
 	grace_period_finished = false
 	grace_period_started = false
@@ -40,9 +40,9 @@ func update(delta):
 	if PLAYER.velocity.length() == 0.0 and PLAYER.is_on_floor():
 		transition.emit("IdlePlayerState")
 		
-	if PLAYER.velocity.y > 10.0 and !PLAYER.is_on_floor() and !PLAYER.is_on_wall():
-		print("1st Fall call")
-		transition.emit("FallingPlayerState")
+	#if !PLAYER.is_on_floor() and !PLAYER.is_on_wall():
+		#print("1st Fall call")
+		#transition.emit("FallingPlayerState")
 		
 	#if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and (!Input.is_action_pressed("move_left") and !Input.is_action_pressed("move_right")):
 	if PLAYER.is_on_wall_only() and !PLAYER.is_on_floor() and PLAYER.input_direction == 0:
@@ -99,12 +99,15 @@ func update(delta):
 		transition.emit("DashingPlayerState")
 		
 	if Input.is_action_just_pressed("jump") and PLAYER.is_on_wall():
+		print("wall jump attempt")
 		if PLAYER.last_wall_normal == 1 and Input.is_action_pressed("move_right"):
 			transition.emit("JumpingPlayerState")
 		elif PLAYER.last_wall_normal == -1 and Input.is_action_pressed("move_left"):
 			transition.emit("JumpingPlayerState")
 		
-
+	if PLAYER.velocity.y > 10.0 and !PLAYER.is_on_floor() and !PLAYER.is_on_wall():
+		print("1st Fall call")
+		transition.emit("FallingPlayerState")
 	
 
 func _on_fall_grace_timer_timeout() -> void:

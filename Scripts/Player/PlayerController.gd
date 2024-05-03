@@ -5,19 +5,19 @@ extends CharacterBody2D
 
 # General Movement Variables
 
-@export var BASE_SPEED : float = 400.0
-@export var BASE_ACCELERATION_RATE : float = 30.0
-@export var BASE_DECELERATION_RATE : float = 40.0
+@export var BASE_SPEED : float = 100.0
+@export var BASE_ACCELERATION_RATE : float = 10.0
+@export var BASE_DECELERATION_RATE : float = 20.0
 var input_direction : float
 
 # Jump variables
 
-@export var BASE_JUMP_VELOCITY : float = -400.0
+@export var BASE_JUMP_VELOCITY : float = -200.0
 var can_jump : bool = true
 
 
 # Double Jump Variables
-@export var DOUBLE_jUMP_VELOCITY : float = -400.0
+@export var DOUBLE_jUMP_VELOCITY : float = -50.0
 var can_double_jump : bool = false
 var double_jump_unlocked : bool = true
 
@@ -42,7 +42,7 @@ var wall_jump_unlocked : bool = true
 @export var MELEE_SIDE_HITBOX : Area2D
 @export var MELEE_TOP_HITBOX : Area2D
 @export var MELEE_BOTTOM_HITBOX : Area2D
-@export var MELEE_RESET_LENGTH : float = 1.0
+@export var MELEE_RESET_LENGTH : float = 0.3
 @export var MELEE_ATTACK_LENGTH : float = 0.3
 var can_melee_attack : bool = true
 
@@ -50,14 +50,16 @@ var can_melee_attack : bool = true
 # Gravity variables
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-@export var wall_jump_gravity : int = 490
+@export var wall_jump_gravity : int = 150
 var normal_gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
+@export var updated_normal_gravity : int = 600
+
 
 var gravity_to_use : int
 
 
 func _ready() -> void:
-	gravity_to_use = normal_gravity
+	gravity_to_use = updated_normal_gravity
 	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("exit"):
@@ -124,6 +126,7 @@ func wall_collider_check() -> bool:
 		
 		
 func melee_attack():
+	print("attacking with melee")
 	$MeleeHitboxSide/MeleeSideCollider.set_deferred("disabled",false)
 	#MELEE_SIDE_HITBOX.set_deferred("Monitoring", true)
 	$MeleeHitboxSide/AnimatedSprite2D.show()
@@ -132,6 +135,12 @@ func melee_attack():
 	#MELEE_SIDE_HITBOX.set_deferred("Monitoring", false)
 	$MeleeHitboxSide/MeleeSideCollider.set_deferred("disabled",true)
 	$MeleeHitboxSide/AnimatedSprite2D.hide()
-	can_melee_attack = true
+	print("melee attack finished")
+	melee_reset()
+	#can_melee_attack = true
 	
+func melee_reset():
+	await get_tree().create_timer(MELEE_RESET_LENGTH).timeout
+	can_melee_attack = true
+	print("can melee again")
 	

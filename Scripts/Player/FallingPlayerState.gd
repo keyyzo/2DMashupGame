@@ -2,10 +2,10 @@ class_name FallingPlayerState
 
 extends PlayerMovementState
 
-@export var BASE_SPEED : float = 400.0
-@export var BASE_ACCELERATION_RATE : float = 30.0
-@export var BASE_DECELERATION_RATE : float = 40.0
-@export var BASE_JUMP_VELOCITY : float = -400.0
+@export var BASE_SPEED : float = 100.0
+@export var BASE_ACCELERATION_RATE : float = 10.0
+@export var BASE_DECELERATION_RATE : float = 20.0
+@export var BASE_JUMP_VELOCITY : float = -200.0
 
 func enter(previous_state) -> void:
 	print("Player is now Falling")

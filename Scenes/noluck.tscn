@@ -17,7 +17,7 @@ radius = 7.0
 height = 16.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8jxu1"]
-size = Vector2(48, 64)
+size = Vector2(19.5, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o88ns"]
 atlas = ExtResource("11_qij1g")
@@ -49,23 +49,20 @@ animations = [{
 }]
 
 [node name="Noluck" type="CharacterBody2D" node_paths=PackedStringArray("WALL_COLLIDER", "MELEE_SIDE_HITBOX")]
+safe_margin = 0.1
 script = ExtResource("1_285cl")
 WALL_COLLIDER = NodePath("WallCollider")
 MELEE_SIDE_HITBOX = NodePath("MeleeHitboxSide")
 
 [node name="WallCollider" type="RayCast2D" parent="."]
-target_position = Vector2(40, 0)
+target_position = Vector2(15, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-scale = Vector2(2, 2)
 shape = SubResource("CapsuleShape2D_8k2yh")
-disabled = true
 debug_color = Color(0, 0.627451, 0.733333, 0.419608)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(4, 4)
 texture = ExtResource("1_ckp2j")
 
 [node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("CURRENT_STATE")]
@@ -102,7 +99,7 @@ one_shot = true
 script = ExtResource("10_us0gu")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-scale = Vector2(4, 4)
+visible = false
 polygon = PackedVector2Array(-7, 8, 7, 8, 7, -2, 3, -8, -3, -8, -7, -2)
 
 [node name="MeleeHitboxSide" type="Area2D" parent="."]
@@ -111,7 +108,7 @@ collision_mask = 48
 monitoring = false
 
 [node name="MeleeSideCollider" type="CollisionShape2D" parent="MeleeHitboxSide"]
-position = Vector2(58, 0)
+position = Vector2(19, 0)
 shape = SubResource("RectangleShape2D_8jxu1")
 disabled = true
 debug_color = Color(0.572549, 0.133333, 0.819608, 0.419608)
@@ -119,8 +116,8 @@ debug_color = Color(0.572549, 0.133333, 0.819608, 0.419608)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MeleeHitboxSide"]
 visible = false
 texture_filter = 1
-position = Vector2(55, 9.53674e-07)
-scale = Vector2(3.375, 4)
+position = Vector2(18, -0.5)
+scale = Vector2(1.375, 1.0625)
 sprite_frames = SubResource("SpriteFrames_2lxdn")
 
 [connection signal="timeout" from="PlayerStateMachine/DashingPlayerState/DashLength" to="PlayerStateMachine/DashingPlayerState" method="_on_dash_length_timeout"]

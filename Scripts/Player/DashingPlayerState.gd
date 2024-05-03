@@ -2,10 +2,10 @@ class_name DashingPlayerState
 
 extends PlayerMovementState
 
-@export var BASE_SPEED : float = 1200.0
-@export var BASE_ACCELERATION_RATE : float = 200.0
-@export var BASE_DECELERATION_RATE : float = 40.0
-@export var BASE_JUMP_VELOCITY : float = -400.0
+@export var BASE_SPEED : float = 400.0
+@export var BASE_ACCELERATION_RATE : float = 50.0
+@export var BASE_DECELERATION_RATE : float = 80.0
+@export var BASE_JUMP_VELOCITY : float = -200.0
 @export var DASH_TIMER : Timer
 var DASHING : bool = false
 

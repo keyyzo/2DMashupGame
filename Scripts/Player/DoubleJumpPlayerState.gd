@@ -2,11 +2,11 @@ class_name DoubleJumpPlayerState
 
 extends PlayerMovementState
 
-@export var BASE_SPEED : float = 400.0
-@export var BASE_ACCELERATION_RATE : float = 30.0
-@export var BASE_DECELERATION_RATE : float = 40.0
-@export var DOUBLE_JUMP_VELOCITY : float = -500.0
-@export var WALL_JUMP_KNOCKBACK_STRENGTH : float = 600.0
+@export var BASE_SPEED : float = 100.0
+@export var BASE_ACCELERATION_RATE : float = 10.0
+@export var BASE_DECELERATION_RATE : float = 20.0
+@export var DOUBLE_JUMP_VELOCITY : float = -200.0
+@export var WALL_JUMP_KNOCKBACK_STRENGTH : float = 180.0
 
 
 func enter(previous_state) -> void:
