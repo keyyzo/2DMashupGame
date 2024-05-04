@@ -1,3 +1,7 @@
 res://Scenes/noluck.tscn
 res://Scenes/test_level.tscn
 res://Scripts/Player/WallJumpingPlayerState.gd
+res://Scripts/Player/PlayerController.gd
+res://Scenes/orb_shooter.tscn
+res://Scripts/Player/orb_shooter.gd
+res://Scripts/Global/global.gd

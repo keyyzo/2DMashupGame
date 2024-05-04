@@ -46,6 +46,11 @@ var wall_jump_unlocked : bool = true
 @export var MELEE_ATTACK_LENGTH : float = 0.3
 var can_melee_attack : bool = true
 
+# Range Variables
+
+
+var can_range_attack : bool = false
+var range_attack_unlocked : bool = true
 
 # Gravity variables
 
@@ -59,6 +64,7 @@ var gravity_to_use : int
 
 
 func _ready() -> void:
+	Global.player = self
 	gravity_to_use = updated_normal_gravity
 	
 func _input(event: InputEvent) -> void:

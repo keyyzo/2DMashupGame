@@ -1,4 +1,5 @@
-res://Sprites/PlayerCharacter
+res://Scripts/Global
 res://Scripts/Player
-res://Scripts
 res://Scenes
+res://Sprites/PlayerCharacter
+res://Scripts

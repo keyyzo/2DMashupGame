@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://ck4fshglflwye"]
+
+[ext_resource type="Texture2D" uid="uid://dxjcpcyslj4yq" path="res://Sprites/PlayerCharacter/orb_test.png" id="1_5ugak"]
+[ext_resource type="Script" path="res://Scripts/Player/orb_shooter.gd" id="1_od4i1"]
+
+[node name="OrbShooter" type="Node2D" node_paths=PackedStringArray("PIVOT_POINT", "SHOOTING_POINT")]
+script = ExtResource("1_od4i1")
+PIVOT_POINT = NodePath("PivotPoint")
+SHOOTING_POINT = NodePath("PivotPoint/ShootingPoint")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_5ugak")
+
+[node name="PivotPoint" type="Node2D" parent="."]
+
+[node name="ShootingPoint" type="Marker2D" parent="PivotPoint"]
